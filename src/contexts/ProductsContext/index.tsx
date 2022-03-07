@@ -38,7 +38,7 @@ export function ProductsProvider({
     const productIds = products.map(product => Number(product.productId));
     const withoutNaN = productIds.filter(product => !isNaN(product));
 
-    const maxProductIdNumber = Math.max(...withoutNaN);
+    const maxProductIdNumber = productIds.length ? Math.max(...withoutNaN) : 0;
 
     try {
       const submitData = {
