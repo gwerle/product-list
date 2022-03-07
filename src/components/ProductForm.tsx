@@ -13,8 +13,10 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import * as rest from '../services/ProductsService';
 import { ProductI } from '../@types/api/ProductsList';
 import { useProducts } from '../contexts/ProductsContext/useProducts';
 
@@ -52,10 +54,44 @@ export default function ProductForm({
   editMode,
   product,
 }: ProductFormProps) {
-  const { createNewProduct, editProduct, isSavingData } = useProducts();
-  const { register, handleSubmit } = useForm<ProductI>({
+  const { products, fetchGetProducts } = useProducts();
+  const [isSavingData, setSavingData] = useState(false);
+  const { register, handleSubmit, reset } = useForm<ProductI>({
     defaultValues: editMode ? product : {},
   });
+
+  const createNewProduct = async (data: ProductI) => {
+    setSavingData(true);
+    const productIds = products.map(product => Number(product.productId));
+    const withoutNaN = productIds.filter(product => !isNaN(product));
+
+    const maxProductIdNumber = productIds.length ? Math.max(...withoutNaN) : 0;
+
+    try {
+      const submitData = {
+        ...data,
+        productId: String(maxProductIdNumber + 1),
+      };
+
+      await rest.createProduct(submitData);
+
+      fetchGetProducts();
+      reset();
+    } finally {
+      setSavingData(false);
+    }
+  };
+
+  const editProduct = async (data: ProductI) => {
+    setSavingData(true);
+    try {
+      await rest.editProduct(data);
+
+      fetchGetProducts();
+    } finally {
+      setSavingData(false);
+    }
+  };
 
   const onSubmitForm = (data: ProductI) => {
     if (editMode) {

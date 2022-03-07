@@ -1,11 +1,4 @@
-import {
-  ChakraProvider,
-  Box,
-  Grid,
-  theme,
-  Button,
-  Flex,
-} from '@chakra-ui/react';
+import { ChakraProvider, Box, Grid, theme } from '@chakra-ui/react';
 
 import { ProductsProvider } from './contexts/ProductsContext';
 import Header from './components/Header';

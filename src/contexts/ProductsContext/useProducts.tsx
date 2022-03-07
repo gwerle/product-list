@@ -19,27 +19,9 @@ export const useProducts = (): ProductsContextData => {
     products => products.isGetLoading,
   );
 
-  const isSavingData = useContextSelector(
-    ProductsContext,
-    products => products.isSavingData,
-  );
-
-  const createNewProduct = useContextSelector(
-    ProductsContext,
-    products => products.createNewProduct,
-  );
-
-  const editProduct = useContextSelector(
-    ProductsContext,
-    products => products.editProduct,
-  );
-
   return {
     products,
     fetchGetProducts,
     isGetLoading,
-    isSavingData,
-    createNewProduct,
-    editProduct,
   };
 };
